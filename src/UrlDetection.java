@@ -36,7 +36,7 @@ public class UrlDetection {
 	public static void main(String[] args) {
 		
 		
-		System.out.println(extractUrls("Welcome to https://stackoverflow.com/ and here is another link http://www.google.com/ \n which is a great search engine"));
+		System.out.println(extractUrls("Welcome to ftp://www.stackoverflow.com and here is another link https://www.google.com/ \n which is a great search engine"));
 		System.out.println();
 
 	}
@@ -48,9 +48,13 @@ public class UrlDetection {
 	public static List<String> extractUrls(String text)
 	{
 	    List<String> containedUrls = new ArrayList<String>();
-	    String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+	    String urlRegex = "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)";
+	    
 	    Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
 	    Matcher urlMatcher = pattern.matcher(text);
+	    
 
 	    while (urlMatcher.find())
 	    {

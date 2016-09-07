@@ -29,7 +29,7 @@ public class UrlDetection {
 	 * @return 
 	 */
 	public void extractUrls(String text){
-	    //List<String> containedUrls = new ArrayList<String>();
+	    
 	    String urlRegex = "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
                 + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
                 + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)";
@@ -48,7 +48,7 @@ public class UrlDetection {
 
 	}
 	
-	//teste
+	
 	
 
 }

@@ -13,6 +13,8 @@ public class UrlDetection {
 	
 	//======================= Gets =========================// 
 	
+	//---
+	
 	public int getCountUrl(){	
 		return this.CountUrl;
 	}

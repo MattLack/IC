@@ -14,14 +14,13 @@ public class Principal {
 		
 		String texto = teclado.nextLine();
 		
-		WebLink.WebLinkingCalc(texto);
+		
+		System.out.println("Resultado Weblinkg: " + WebLink.WebLinkingCalc(texto));
 		
 		System.out.println(WebLink.getCountSent());
 		System.out.println(WebLink.getSenteces().toString());
 		System.out.println(WebLink.getCountUrl());
 		System.out.println(WebLink.getContainedUrls().toString());
-		
-		System.out.println("Resultado Weblinkg: " + WebLink.CalcUrlDetection());
 		
 		
 		

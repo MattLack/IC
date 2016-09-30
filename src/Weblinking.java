@@ -34,10 +34,6 @@ public class Weblinking {
 	//======================================================// 
 		
 	
-	/**
-	 * Returns a list with all links contained in the input
-	 * @return 
-	 */
 	
 	public void extractUrls(String text){
 	    
@@ -78,16 +74,19 @@ public class Weblinking {
 		
 		int WeblinkFormat = 1;
 		
-		double result = ( this.CountUrl / this.CountSent  );
+		double result = ( this.CountUrl / this.CountSent  ) * WeblinkFormat;
 		
 		return result;
 	}
 	
 	
-	public void WebLinkingCalc(String text){
+	
+	public double WebLinkingCalc(String text){
 		
 		this.extractUrls(text);
 		this.CutSenteces(text);
+		
+		return this.CalcUrlDetection();
 		
 	}
 	

@@ -35,6 +35,19 @@ public class Weblinking {
 		
 	
 	
+	public static void replaceAll(StringBuffer builder, String from, String to){
+		
+	      int index = builder.indexOf(from);
+	      while (index != -1)
+	      {
+	         builder.replace(index, index + from.length(), to);
+	         index += to.length();
+	         index = builder.indexOf(from, index);
+	      }
+	}
+	
+	
+	
 	public void extractUrls(String text){
 	    
 	    String urlRegex = "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
@@ -58,23 +71,41 @@ public class Weblinking {
 	
 	public void CutSenteces(String text){
 		
-		String Alt[] = text.split(Pattern.quote("."));
+		//Recorta as strings dos hiperlinks do texto
 		
-		for (int i = 0; i < Alt.length; i++) {
-			this.sentences.add(Alt[i]);
+		StringBuffer Alt1 = new StringBuffer(text);
+		
+		for (int j = 0; j < this.containedUrls.size(); j++){
+				this.replaceAll(Alt1, containedUrls.get(j), "");
 		}
-	    
+		
+		
+		//Quebra o texto cortado em senteças definidas por ponto
+		
+		String textCut = new String(Alt1);
+		
+		String Alt2[] = textCut.split(Pattern.quote("."));
+		
+		for (int i = 0; i < Alt2.length; i++) {
+			this.sentences.add(Alt2[i]);
+		}
+		
+		
 	    this.CountSent = this.sentences.size();
 		
 	}
 	
 	
 	
+	
 	public double CalcUrlDetection(){
 		
-		int WeblinkFormat = 1;
+		Integer WeblinkFormat = 1;
 		
-		double result = ( this.CountUrl / this.CountSent  ) * WeblinkFormat;
+		Float a = (float) this.getCountUrl();
+		Float b = (float) this.getCountSent();
+		
+		Float result =  ( ( a.floatValue() / b.floatValue()  ) * WeblinkFormat);
 		
 		return result;
 	}

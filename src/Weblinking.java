@@ -79,14 +79,17 @@ public class Weblinking {
 				this.replaceAll(Alt1, containedUrls.get(j), "");
 		}
 		
+		
 		//Recorta as reticencias do texto
 		
 		this.replaceAll(Alt1, "...", "");
+		
 		
 		//Subistitue .com sobrando no meio do texto para não atrapalhar 
 		//na quebra de sentenças
 		
 		this.replaceAll(Alt1, ".com", "(ponto)com");
+		
 		
 		//Quebra o texto cortado em senteças definidas por ponto
 		

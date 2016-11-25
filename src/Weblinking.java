@@ -19,7 +19,7 @@ public class Weblinking {
 
 	}
 
-	public void clear() {
+	private void clear() {
 
 		this.containedUrls.clear();
 		this.sentences.clear();

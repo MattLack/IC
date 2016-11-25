@@ -8,13 +8,40 @@ public class Weblinking {
 
 	private List<String> containedUrls = new ArrayList<String>();
 	private List<String> sentences = new ArrayList<String>();
+	private List<String> base = new ArrayList<String>();
 	private int CountUrl;
 	private int CountSent;
+	private int CountWebPagein;
 
-	// ======================= Gets =========================//
+	public Weblinking() {
+
+		clear();
+
+	}
+
+	public void clear() {
+
+		this.containedUrls.clear();
+		this.sentences.clear();
+		this.base.clear();
+		this.CountSent = 0;
+		this.CountUrl = 0;
+		this.CountWebPagein = 0;
+
+	}
+
+	// ======================= Gets&Sets =========================//
 
 	public int getCountUrl() {
 		return this.CountUrl;
+	}
+
+	public List<String> getBase() {
+		return base;
+	}
+
+	public int getCountWebPagein() {
+		return CountWebPagein;
 	}
 
 	public List<String> getContainedUrls() {
@@ -29,13 +56,17 @@ public class Weblinking {
 		return this.sentences;
 	}
 
+	public void setBase(List<String> base) {
+		this.base = base;
+	}
+
 	// ======================================================//
 
 	private static void replaceAll(StringBuffer builder, String from, String to) {
-		
+
 		/**
-		 * Dada uma string (builder), uma segunda string (form) será buscada dentro
-		 * da anterior, e substituida por outra string (to)
+		 * Dada uma string (builder), uma segunda string (form) será buscada
+		 * dentro da anterior, e substituida por outra string (to)
 		 */
 
 		int index = builder.indexOf(from);
@@ -84,12 +115,13 @@ public class Weblinking {
 	}
 
 	private void extractUrls(String text) {
-		
+
 		/**
-		 * Uma estrutura textual que através de também operadores lógicos, alimenta 
-		 * uma variável, que por sua vez usa dos métodos pattern e matcher para identificar
-		 * e extrair textos que contenham a extrutura que foi inserida anteriormente.
-		 * Estas urls são salvas e contadas para utilização posteior
+		 * Uma estrutura textual que através de também operadores lógicos,
+		 * alimenta uma variável, que por sua vez usa dos métodos pattern e
+		 * matcher para identificar e extrair textos que contenham a extrutura
+		 * que foi inserida anteriormente. Estas urls são salvas e contadas para
+		 * utilização posteior
 		 */
 
 		String urlRegex = "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
@@ -118,13 +150,11 @@ public class Weblinking {
 			replaceAll(Alt1, containedUrls.get(j), "");
 		}
 
-		
 		/**
 		 * chamada do método replace
 		 */
-		
-		replace(Alt1);
 
+		replace(Alt1);
 
 		/**
 		 * Quebra o texto cortado em senteças definidas por ponto
@@ -150,10 +180,10 @@ public class Weblinking {
 		 */
 
 		/**
-		 * Apenas foi considerado o fator Weblinkformat, pois o fator 
-		 * hiperlinked text considera apenas hiperlinks dentro de palavras
-		 * do texto, o que na abordagem java utilizada se torna impraticável
-		 * a análise
+		 * Apenas foi considerado o fator Weblinkformat, pois o fator
+		 * hiperlinked text considera apenas hiperlinks dentro de palavras do
+		 * texto, o que na abordagem java utilizada se torna impraticável a
+		 * análise
 		 */
 
 		Integer WeblinkFormat = 1;
@@ -167,16 +197,90 @@ public class Weblinking {
 	}
 
 	public double WebLinkingCalc(String text) {
+		
+		/**
+		 * Este método compartilha métodos com a abordagem WeblinkQualityCalc,
+		 * por isso, para garantir a consistência dos resultados é feita a
+		 * limpeza das variáveis globais logo no início da execução.
+		 */
+		
+		/**
+		 * Caso haja necessidade de salvar os resultados referentes a uma execução
+		 * do método WeblinkQualityCalc que seja feita antes da execução deste método,
+		 * utilize os gets para salvar os dados anteriores.
+		 */
 
 		/**
-		 * Retorna o resultado da função WebLinking
+		 * Feita a chamada dos métodos extractUrls e CutSentences
+		 * é chamado o método CalcUrlDetection que é responsável pela função a
+		 * ser calculada.
+		 * Retorna o resultado da função WebLinking.
 		 */
+		
+		clear();
 
 		this.extractUrls(text);
 		this.CutSenteces(text);
 
 		return this.CalcUrlDetection();
 
+	}
+
+	public double WeblinkQualityCalc(String text) {
+		
+		/**
+		 * Neste método primeiro é feita a limpeza das variáveis globais,
+		 * é feita a extração das urls, e para cada url encontrada, é feita
+		 * uma varredura da lista (base) contendo as palavras-chave de relevância.
+		 * Esta varredura é feita para em cada url para cada palavra-chave.
+		 */
+		
+		/**
+		 * É necessário haver preenchido a lista (base) antes de ser efetuada
+		 * a chamada deste método.
+		 */
+		
+		/**
+		 * Este método compartilha métodos com a abordagem WeblinkingCalc,
+		 * por isso, para garantir a consistência dos resultados é feita a
+		 * limpeza das variáveis globais logo no início da execução.
+		 */
+		
+		/**
+		 * Caso haja necessidade de salvar os resultados referentes a uma execução
+		 * do método WeblinkingCalc que seja feita antes da execução deste método,
+		 * utilize os gets para salvar os dados anteriores.
+		 */
+		
+		clear();
+		this.extractUrls(text);
+
+		int numb = base.size();
+		int numc = containedUrls.size();
+
+		for (int i = 0; i < numc; i++) {
+			for (int j = 0; j < numb; j++)
+				if (containedUrls.get(i).matches(base.get(j)))
+					this.CountWebPagein = this.CountWebPagein + 1;
+		}
+
+		return CalcToWQ();
+
+	}
+
+	private double CalcToWQ() {
+
+		/**
+		 * Método que utiliza as váriaveis globais devidamente atualizadas para
+		 * efetuar a função e retornar um valor double com o resultado
+		 */
+
+		Float a = (float) this.getCountWebPagein();
+		Float b = (float) this.base.size();
+
+		Float result = (a.floatValue() / b.floatValue());
+
+		return result;
 	}
 
 }

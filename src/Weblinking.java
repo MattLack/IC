@@ -31,7 +31,12 @@ public class Weblinking {
 
 	// ======================================================//
 
-	public static void replaceAll(StringBuffer builder, String from, String to) {
+	private static void replaceAll(StringBuffer builder, String from, String to) {
+		
+		/**
+		 * Dada uma string (builder), uma segunda string (form) será buscada dentro
+		 * da anterior, e substituida por outra string (to)
+		 */
 
 		int index = builder.indexOf(from);
 		while (index != -1) {
@@ -40,15 +45,14 @@ public class Weblinking {
 			index = builder.indexOf(from, index);
 		}
 	}
-	
-	
-	public static void replace(StringBuffer Alt1) {
+
+	private static void replace(StringBuffer Alt1) {
 
 		/**
-		 * Subistitue .? sobrando no meio do texto para não atrapalhar na quebra de
-		 * sentenças
+		 * Subistitue .? sobrando no meio do texto para não atrapalhar na quebra
+		 * de sentenças
 		 */
-		
+
 		replaceAll(Alt1, "...", "");
 		replaceAll(Alt1, ".a", "#a");
 		replaceAll(Alt1, ".b", "#b");
@@ -78,9 +82,15 @@ public class Weblinking {
 		replaceAll(Alt1, ".z", "#z");
 
 	}
-	
 
-	public void extractUrls(String text) {
+	private void extractUrls(String text) {
+		
+		/**
+		 * Uma estrutura textual que através de também operadores lógicos, alimenta 
+		 * uma variável, que por sua vez usa dos métodos pattern e matcher para identificar
+		 * e extrair textos que contenham a extrutura que foi inserida anteriormente.
+		 * Estas urls são salvas e contadas para utilização posteior
+		 */
 
 		String urlRegex = "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)" + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
 				+ "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)";
@@ -96,21 +106,25 @@ public class Weblinking {
 
 	}
 
-	public void CutSenteces(String text) {
+	private void CutSenteces(String text) {
 
-		// Recorta as strings dos hiperlinks do texto
+		/**
+		 * Recorta as strings dos hiperlinks do texto
+		 */
 
 		StringBuffer Alt1 = new StringBuffer(text);
 
 		for (int j = 0; j < this.containedUrls.size(); j++) {
-			this.replaceAll(Alt1, containedUrls.get(j), "");
+			replaceAll(Alt1, containedUrls.get(j), "");
 		}
 
-		// Recorta as reticencias do texto
+		
+		/**
+		 * chamada do método replace
+		 */
+		
+		replace(Alt1);
 
-		this.replace(Alt1);
-
-		this.replaceAll(Alt1, ".com", "(ponto)com");
 
 		/**
 		 * Quebra o texto cortado em senteças definidas por ponto
@@ -128,16 +142,18 @@ public class Weblinking {
 
 	}
 
-	
-	public double CalcUrlDetection() {
-		
+	private double CalcUrlDetection() {
+
 		/**
-		 * Método que utiliza as váriaveis globais devidamente atualizadas
-		 * para efetuar a função e retornar um valor double com o resultado
+		 * Método que utiliza as váriaveis globais devidamente atualizadas para
+		 * efetuar a função e retornar um valor double com o resultado
 		 */
-		
+
 		/**
-		 * Apenas foi considerado o fator Weblinkformat,  
+		 * Apenas foi considerado o fator Weblinkformat, pois o fator 
+		 * hiperlinked text considera apenas hiperlinks dentro de palavras
+		 * do texto, o que na abordagem java utilizada se torna impraticável
+		 * a análise
 		 */
 
 		Integer WeblinkFormat = 1;
@@ -149,24 +165,18 @@ public class Weblinking {
 
 		return result;
 	}
-	
-	
 
 	public double WebLinkingCalc(String text) {
-		
+
 		/**
 		 * Retorna o resultado da função WebLinking
 		 */
-		
+
 		this.extractUrls(text);
 		this.CutSenteces(text);
 
 		return this.CalcUrlDetection();
 
 	}
-
-	
-
-	
 
 }
